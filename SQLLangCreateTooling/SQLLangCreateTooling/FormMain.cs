@@ -9,19 +9,24 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using System.IO;
 
+
 namespace SQLLangCreateTooling
 {
     public partial class FormMain : Form
     {
-        private static int defaultSqlType = 1;//增删改 => 123，默认是增。
-        public static int defaultTables = 0;
-        public static int defaultWarning = 1;
+        private static int defaultSqlType = 1;//增删改 => 1234，默认是增。
         private static int thisYourFirstTap = 1;
+
+        public static int defaultTables = 0;
+
+        public static string selectTableName = "";
+        public static string primaryKeyName = "";
 
         public FormMain()
         {
             InitializeComponent();
-            radioButtonInsert.Checked = true;
+            this.radioButtonInsert.Checked = true;
+            this.textBoxUpdateOnly.ReadOnly = true;
         }
 
         private void textBox_TextChanged(object sender, MouseEventArgs e)
@@ -33,56 +38,39 @@ namespace SQLLangCreateTooling
             ofd.ShowDialog(); //显示打开文件的窗口
             this.textBoxSelect.Text = ofd.FileName; //获得选择的文件路径
 
-            if ((this.textBoxSelect.Text != "") && isItAExcelFile(this.textBoxSelect.Text))
+        #region //修改 labelVersion 的字串显示
+		 
+            int filesType = fileTypesOrExcelTypes(this.textBoxSelect.Text);
+            if (filesType > 0)
             {
-                if (this.textBoxSelect.Text.EndsWith(".xls"))
+                if (filesType == 2003)
                     this.labelVersion.Text = "Excel-2003格式";
-                else if (this.textBoxSelect.Text.EndsWith(".xlsx"))
+                else if (filesType == 2007)
                 {
                     this.labelVersion.Text = "Excel-2007格式";
                 }
                 else
-                    this.labelVersion.Text = "\"未选取文件\"";
+                    this.labelVersion.Text = "\"不可识别文件\"";
             }
             else
                 this.labelVersion.Text = "\"未选取文件\"";
+        #endregion
         }
 
         private void buttonCreate_Click(object sender, EventArgs e)
         {
-            //确定是引用第几张表
-            if (this.textBoxTableNum.Text == "")
-            {
-                defaultTables = 0;
-            }
-            else
-            {
-                try  
-                {
-                    System.Text.RegularExpressions.Regex rex =
-                                new System.Text.RegularExpressions.Regex(@"^\d{1}$");
-                    
-                    if (rex.IsMatch(this.textBoxTableNum.Text))
-                    {
-                        defaultTables = Convert.ToInt32(this.textBoxTableNum.Text);
-                        if (defaultTables > 0)
-                        {
-                            defaultTables = defaultTables - 1;//传统意义上认为最前面的为第一张表！
-                        }
-                    }
-                }  
-                catch  
-                {
-                    //报错就报错，哥懒得理它。
-                }
-            }
+            //whichTablesSelect();  //屏蔽的功能
+            int fileTypes = fileTypesOrExcelTypes(this.textBoxSelect.Text);
+            primaryKeyName = this.textBoxUpdateOnly.Text;
 
-            if (this.textBoxSelect.Text != "" && isItAExcelFile(this.textBoxSelect.Text))
+            if (fileTypes > 0)
             {
-                created_SQL_Lang_FromExcelFile(this.textBoxSelect.Text);
-                //testToExcel(this.textBoxSelect.Text); //测试用的函数
+                NPOIExcelFilesRead.printSQLLangTypesAndMethods(this.textBoxSelect.Text, fileTypes, defaultSqlType);
+
+                this.labelSheetName.Text = "表格名为：“" + selectTableName + "”";
             }
             else
+            #region //调戏用户的提示框，前面两次会提醒用户需要引入文件，后续不再提醒
             {
                 if (thisYourFirstTap == 1)
                 {
@@ -97,87 +85,58 @@ namespace SQLLangCreateTooling
                     thisYourFirstTap += 1;
                 }
             }
+            #endregion //调戏动作结束
         }
 
-        private Boolean isItAExcelFile(string Str)
+        private int fileTypesOrExcelTypes(string str)
         {
-            //string matchExcel = ".xls$|.xlsx$";//正则表达式方法
-            if (Str.EndsWith(".xls") || Str.EndsWith(".xlsx"))
-                return true;
+            if (str != "")
+            {
+                FileInfo files = new FileInfo(str);
+
+                if (files.Exists == true)
+                {
+                    //string matchExcel = ".xls$|.xlsx$";//正则表达式方法
+                    if (str.EndsWith(".xls"))
+                        return 2003;
+                    else if (str.EndsWith(".xlsx"))
+                        return 2007;
+                    else
+                        return 0;
+                }
+                else
+                    return -1;
+            }
             else
-                return false;
-        }
-
-        private DataSet created_SQL_Lang_FromExcelFile(string filePath)
-        {
-            /** 
-             * filePath = "E:\\QQ_File\\康视马甲10.22.xls";
-             * filePath = filePath.Replace("\\","\\\\");//这里原字串中已经有两道杠了 
-             **/
-            try
-            {
-                string strConn;
-                string tableName;
-
-                strConn = GetConnectionString(filePath);
-
-                OleDbConnection oleConn = new OleDbConnection(strConn);
-                oleConn.Open();//开启SQL服务还是报错.....
-
-                System.Data.DataTable schemaTable = oleConn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables, 
-                    new object[] { null, null, null, "TABLE" });
-                try
-                {
-                    tableName = schemaTable.Rows[defaultTables]["TABLE_NAME"].ToString().Trim();
-
-                    String sql = "SELECT * FROM  [" + tableName + "]";//可以是更改Sheet名称，比如sheet2，等等 
-                    OleDbDataAdapter OleDaExcel = new OleDbDataAdapter(sql, oleConn);
-
-                    DataSet OleDsExcle = new DataSet();
-                    OleDaExcel.Fill(OleDsExcle, tableName);
-
-                    createLangByType(defaultSqlType, OleDsExcle);
-
-                    oleConn.Close();
-
-                    //提醒用户已经生成数据完毕！
-                    MessageBox.Show("文件已经生成或追加完毕，请注意查看！", "完成提示",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    //return OleDsExcle;
-                    return null;
-                }
-                catch
-                {
-                    int trueTables = defaultTables + 1;
-                    MessageBox.Show("第" + trueTables + "张表不存在或无法读取！", "温馨提示",
-                        MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return null;
-                }
-            }
-            catch
-            {
-                MessageBox.Show("读取Excel数据失败!表格内容为空或无法识别。\n请确认数据有效性！", "温馨提示",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return null;
-            }
+                return -1;
         }
 
         private void radioButtonInsert_CheckedChanged(object sender, EventArgs e)
         {
             defaultSqlType = 1;
+            this.textBoxUpdateOnly.ReadOnly = true;
         }
 
         private void radioButtonUpdate_CheckedChanged(object sender, EventArgs e)
         {
             defaultSqlType = 3;
+            this.textBoxUpdateOnly.ReadOnly = true;
         }
 
         private void radioButtonDelete_CheckedChanged(object sender, EventArgs e)
         {
             defaultSqlType = 2;
+            this.textBoxUpdateOnly.ReadOnly = true;
+
         }
 
+        private void radioButtonUpdateOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            defaultSqlType = 4;
+            this.textBoxUpdateOnly.ReadOnly = false;
+        }
+
+        #region //旧的代码，OleDbConnection方式，OLEDB方法打开Excel文档；已经弃用的代码。
         private void createLangByType(int num, DataSet getDataSet)
         {
             switch (defaultSqlType)
@@ -200,20 +159,32 @@ namespace SQLLangCreateTooling
             }
         }
 
-        private void showHelpForTools(object sender, HelpEventArgs hlpevent)
+        private void whichTablesSelect()
         {
-            MessageBox.Show("软件如有问题，请与我联系，QQ或邮箱：187346153@qq.com   \n非诚勿扰！", "亲,哥终于找到你了！",
-                      MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void textBoxTableNum_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
-        {
-            e.Handled = true;//阻止输入
-            
-            //例外情形，数字或删除键
-            if ((e.KeyChar >= '0' && e.KeyChar <= '9') || (e.KeyChar == (char)8))
+            if (this.textBoxTableNum.Text == "")
             {
-                e.Handled = false;
+                defaultTables = 0;
+            }
+            else
+            {
+                try
+                {
+                    System.Text.RegularExpressions.Regex rex =
+                                new System.Text.RegularExpressions.Regex(@"^\d{1}$");
+
+                    if (rex.IsMatch(this.textBoxTableNum.Text))
+                    {
+                        defaultTables = Convert.ToInt32(this.textBoxTableNum.Text);
+                        if (defaultTables > 0)
+                        {
+                            defaultTables = defaultTables - 1;//传统意义上认为最前面的为第一张表！
+                        }
+                    }
+                }
+                catch
+                {
+                    //报错就报错吧，哥懒得理它。
+                }
             }
         }
 
@@ -266,11 +237,6 @@ namespace SQLLangCreateTooling
             }
         }
 
-        private void radioButtonUpdateOnly_CheckedChanged(object sender, EventArgs e)
-        {
-            defaultSqlType = 4;
-        }
-
         //如果连接字符串不对，有可能出现"Could not find installable ISAM ” Exception
         private string GetConnectionString(string fileName)
         {
@@ -299,5 +265,80 @@ namespace SQLLangCreateTooling
 
             return connectString;
         }
+
+        private DataSet created_SQL_Lang_FromExcelFile(string filePath)
+        {
+            /** 
+             * filePath = "E:\\QQ_File\\康视马甲10.22.xls";
+             * filePath = filePath.Replace("\\","\\\\");//这里原字串中已经有两道杠了 
+             **/
+            try
+            {
+                string strConn;
+                string tableName;
+
+                strConn = GetConnectionString(filePath);
+
+                OleDbConnection oleConn = new OleDbConnection(strConn);
+                oleConn.Open();//开启SQL服务还是报错.....
+
+                System.Data.DataTable schemaTable = oleConn.GetOleDbSchemaTable(System.Data.OleDb.OleDbSchemaGuid.Tables,
+                    new object[] { null, null, null, "TABLE" });
+                try
+                {
+                    tableName = schemaTable.Rows[defaultTables]["TABLE_NAME"].ToString().Trim();
+
+                    String sql = "SELECT * FROM  [" + tableName + "]";//可以是更改Sheet名称，比如sheet2，等等 
+                    OleDbDataAdapter OleDaExcel = new OleDbDataAdapter(sql, oleConn);
+
+                    DataSet OleDsExcle = new DataSet();
+                    OleDaExcel.Fill(OleDsExcle, tableName);
+
+                    createLangByType(defaultSqlType, OleDsExcle);
+
+                    oleConn.Close();
+
+                    //提醒用户已经生成数据完毕！
+                    MessageBox.Show("文件已经生成或追加完毕，请注意查看！", "完成提示",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    //return OleDsExcle;
+                    return null;
+                }
+                catch
+                {
+                    int trueTables = defaultTables + 1;
+                    MessageBox.Show("第" + trueTables + "张表不存在或无法读取！", "温馨提示",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return null;
+                }
+            }
+            catch
+            {
+                MessageBox.Show("读取Excel数据失败!表格内容为空或无法识别。\n请确认数据有效性！", "温馨提示",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return null;
+            }
+        }
+        #endregion //旧的代码结束
+
+        private void showHelpForTools(object sender, HelpEventArgs hlpevent)
+        {
+            MessageBox.Show("软件如有问题，请与我联系，https://github.com/YamazakyLau \n非诚勿扰！", "亲,哥终于找到你了！",
+                      MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void textBoxTableNum_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            e.Handled = true;//阻止输入
+            
+            //例外情形，数字或删除键
+            if ((e.KeyChar >= '0' && e.KeyChar <= '9') || (e.KeyChar == (char)8))
+            {
+                e.Handled = false;
+            }
+        }
+
+
     }
 }

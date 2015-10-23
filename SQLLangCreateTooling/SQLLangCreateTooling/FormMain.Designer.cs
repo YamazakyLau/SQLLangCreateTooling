@@ -70,12 +70,12 @@
             // 
             this.labelVersion.AutoSize = true;
             this.labelVersion.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.labelVersion.ForeColor = System.Drawing.Color.Red;
             this.labelVersion.Location = new System.Drawing.Point(261, 11);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(104, 16);
+            this.labelVersion.Size = new System.Drawing.Size(120, 16);
             this.labelVersion.TabIndex = 2;
-            this.labelVersion.Text = "\"未选取文件\"";
+            this.labelVersion.Text = "“未选取文件”";
             // 
             // buttonCreate
             // 
@@ -128,8 +128,8 @@
             // 
             this.labelSqlType.AutoSize = true;
             this.labelSqlType.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labelSqlType.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.labelSqlType.Location = new System.Drawing.Point(9, 66);
+            this.labelSqlType.ForeColor = System.Drawing.Color.Blue;
+            this.labelSqlType.Location = new System.Drawing.Point(15, 63);
             this.labelSqlType.Name = "labelSqlType";
             this.labelSqlType.Size = new System.Drawing.Size(200, 16);
             this.labelSqlType.TabIndex = 7;
@@ -182,24 +182,25 @@
             // labelSheetName
             // 
             this.labelSheetName.AutoSize = true;
+            this.labelSheetName.ForeColor = System.Drawing.Color.Red;
             this.labelSheetName.Location = new System.Drawing.Point(125, 137);
             this.labelSheetName.Name = "labelSheetName";
             this.labelSheetName.Size = new System.Drawing.Size(95, 12);
             this.labelSheetName.TabIndex = 12;
-            this.labelSheetName.Text = "“未选定Sheet”";
+            this.labelSheetName.Text = "“未选择Sheet”";
             // 
             // label_Only
             // 
             this.label_Only.AutoSize = true;
             this.label_Only.Location = new System.Drawing.Point(83, 114);
             this.label_Only.Name = "label_Only";
-            this.label_Only.Size = new System.Drawing.Size(65, 12);
+            this.label_Only.Size = new System.Drawing.Size(77, 12);
             this.label_Only.TabIndex = 13;
-            this.label_Only.Text = "主键名称：";
+            this.label_Only.Text = "表主键名称：";
             // 
             // textBoxUpdateOnly
             // 
-            this.textBoxUpdateOnly.Location = new System.Drawing.Point(154, 111);
+            this.textBoxUpdateOnly.Location = new System.Drawing.Point(166, 111);
             this.textBoxUpdateOnly.MaxLength = 20;
             this.textBoxUpdateOnly.Name = "textBoxUpdateOnly";
             this.textBoxUpdateOnly.Size = new System.Drawing.Size(118, 21);

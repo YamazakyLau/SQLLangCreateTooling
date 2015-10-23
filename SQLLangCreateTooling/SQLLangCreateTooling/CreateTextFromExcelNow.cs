@@ -171,74 +171,6 @@ namespace SQLLangCreateTooling
 
         }
         
-        public static void printSQLLangUpdateOnly(DataSet getDataSet)
-        {
-            int hangY, lieXX;
-            string basicStr = "UPDATE ";
-
-            hangY = getDataSet.Tables[0].Rows.Count;//建议不要出现无效数据列，如有部分单元格空白！
-            lieXX = getDataSet.Tables[0].Columns.Count;
-
-            if (hangY < 2 || lieXX < 3)
-            {
-                MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
-                    MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-                return;     //如果行列太少，那么直接无视！
-            }
-
-            try
-            {
-                FileStream aFile = new FileStream("UpdateOnly.txt", FileMode.Append);
-                StreamWriter sw = new StreamWriter(aFile);
-
-                /*
-                 * Excel File Likes：(Sheet Name = DataBase Table name = String "update_only")
-                    tables_name	        name	age sex
-                    video_category      张松溪	22	1
-                    video_category      宋远桥	33	2
-                    video_category      俞岱岩	44	1
-                    video_category      张三丰	55	1
-                    video_category      殷梨亭	66	2
-                 * UPDATE `update_only`.`video_category` SET age='22',sex='1' WHERE 'id'=
-                 *                                  (SELECT 'id' FROM `update_only`.`video_category` WHERE 'name'='张松溪');
-                 * 减少部分语句，假设已经切换到当前数据库：
-                 * UPDATE `video_category` SET age='22',sex='1' WHERE 'id'=
-                 *                                  (SELECT 'id' FROM `video_category` WHERE 'name'='张松溪');
-                */
-                for (int i = 1; i < hangY; i++)
-                {
-                    string outPrint;
-                    outPrint = basicStr + getDataSet.Tables[0].Rows[i][0].ToString() + " SET ";
-                    for(int j=2; j < lieXX; j++)
-                    {
-                        outPrint = outPrint + getDataSet.Tables[0].Rows[0][j].ToString() + "=" + "'" + getDataSet.Tables[0].Rows[i][j].ToString() + "'";
-                        if (j != lieXX - 1)
-                        {
-                            outPrint = outPrint + ",";
-                        }
-                        else
-                        {
-                            outPrint = outPrint + " ";
-                        }
-                    }
-                    //假设主键名称为'id'
-                    outPrint = outPrint + "WHERE " + getDataSet.Tables[0].Rows[0][1].ToString() + "=" + "'" + getDataSet.Tables[0].Rows[i][1].ToString() + "';";
-
-                    // Write data to file.
-                    sw.WriteLine(outPrint);
-                }
-
-                //结束写入
-                sw.Close();
-            }
-            catch (IOException ex)
-            {
-                MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
-                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-        }
-
 
         public static void printSQLLangUpdate(DataSet getDataSet)
         {
@@ -295,5 +227,77 @@ namespace SQLLangCreateTooling
                 return;
             }
         }
+
+
+        public static void printSQLLangUpdateOnly(DataSet getDataSet)
+        {
+            int hangY, lieXX;
+            string basicStr = "UPDATE ";
+
+            hangY = getDataSet.Tables[0].Rows.Count;//建议不要出现无效数据列，如有部分单元格空白！
+            lieXX = getDataSet.Tables[0].Columns.Count;
+
+            if (hangY < 2 || lieXX < 3)
+            {
+                MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                return;     //如果行列太少，那么直接无视！
+            }
+
+            try
+            {
+                FileStream aFile = new FileStream("UpdateOnly.txt", FileMode.Append);
+                StreamWriter sw = new StreamWriter(aFile);
+
+                /*
+                 * Excel File Likes：(Sheet Name = DataBase Table name = String "update_only")
+                    tables_name	        name	age sex
+                    video_category      张松溪	22	1
+                    video_category      宋远桥	33	2
+                    video_category      俞岱岩	44	1
+                    video_category      张三丰	55	1
+                    video_category      殷梨亭	66	2
+                 * UPDATE `update_only`.`video_category` SET age='22',sex='1' WHERE 'id'=
+                 *                                  (SELECT 'id' FROM `update_only`.`video_category` WHERE 'name'='张松溪');
+                 * 减少部分语句，假设已经切换到当前数据库：
+                 * UPDATE `video_category` SET age='22',sex='1' WHERE 'id'=
+                 *                                  (SELECT 'id' FROM `video_category` WHERE 'name'='张松溪');
+                */
+                for (int i = 1; i < hangY; i++)
+                {
+                    string outPrint;
+                    outPrint = basicStr + getDataSet.Tables[0].Rows[i][0].ToString() + " SET ";
+                    for (int j = 2; j < lieXX; j++)
+                    {
+                        outPrint = outPrint + getDataSet.Tables[0].Rows[0][j].ToString() + "=" + "'" + getDataSet.Tables[0].Rows[i][j].ToString() + "'";
+                        if (j != lieXX - 1)
+                        {
+                            outPrint = outPrint + ",";
+                        }
+                        else
+                        {
+                            outPrint = outPrint + " ";
+                        }
+                    }
+                    //假设主键名称为'id'
+                    outPrint = outPrint + "WHERE " + getDataSet.Tables[0].Rows[0][1].ToString() + 
+                                    "=" + "'" + getDataSet.Tables[0].Rows[i][1].ToString() + "';";
+
+                    // Write data to file.
+                    sw.WriteLine(outPrint);
+                }
+
+                //结束写入
+                sw.Close();
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+        }
+
+
     }
 }
