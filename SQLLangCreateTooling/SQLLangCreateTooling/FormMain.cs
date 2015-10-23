@@ -324,7 +324,7 @@ namespace SQLLangCreateTooling
 
         private void showHelpForTools(object sender, HelpEventArgs hlpevent)
         {
-            MessageBox.Show("软件如有问题，请与我联系，https://github.com/YamazakyLau \n非诚勿扰！", "亲,哥终于找到你了！",
+            MessageBox.Show("软件如有问题，请与我联系，https://github.com/YamazakyLau/SQLLangCreateTooling.git \n非诚勿扰！", "亲,哥终于找到你了！",
                       MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
