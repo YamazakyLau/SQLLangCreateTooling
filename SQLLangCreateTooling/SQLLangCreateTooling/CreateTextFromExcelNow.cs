@@ -17,6 +17,11 @@ namespace SQLLangCreateTooling
      */
     class CreateTextFromExcelNow
     {
+		/// <summary>
+        /// DataSet方法生成Insert语句。
+        /// </summary>
+        /// <param name="getDataSet">引用getDataSet数据内容，并将SQL语法语句写入Insert.txt文件中。</param>
+        /// <returns></returns>
         public static void printSQLLangInsert(DataSet getDataSet)
         {
             int hangY, lieXX;
@@ -100,7 +105,12 @@ namespace SQLLangCreateTooling
                 return;
             }
         }
-        
+
+		/// <summary>
+        /// DataSet方法生成Delete语句。
+        /// </summary>
+        /// <param name="getDataSet">引用getDataSet数据内容，并将SQL语法语句写入Delete.txt文件中。</param>
+        /// <returns></returns>        
         public static void printSQLLangDelete(DataSet getDataSet) 
         {
             int hangY, lieXX;
@@ -171,7 +181,11 @@ namespace SQLLangCreateTooling
 
         }
         
-
+		/// <summary>
+        /// DataSet方法生成Update语句。
+        /// </summary>
+        /// <param name="getDataSet">引用getDataSet数据内容，并将SQL语法语句写入Update.txt文件中。</param>
+        /// <returns></returns>
         public static void printSQLLangUpdate(DataSet getDataSet)
         {
             int hangY, lieXX;
@@ -228,7 +242,11 @@ namespace SQLLangCreateTooling
             }
         }
 
-
+		/// <summary>
+        /// DataSet方法生成Update语句。（方法未完全正确，仅实现Update）
+        /// </summary>
+        /// <param name="getDataSet">引用getDataSet数据内容，并将SQL语法语句写入UpdateOnly.txt文件中。</param>
+        /// <returns></returns>
         public static void printSQLLangUpdateOnly(DataSet getDataSet)
         {
             int hangY, lieXX;

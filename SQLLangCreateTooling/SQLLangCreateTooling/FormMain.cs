@@ -13,13 +13,30 @@ using System.IO;
 namespace SQLLangCreateTooling
 {
     public partial class FormMain : Form
-    {
-        private static int defaultSqlType = 1;//增删改 => 1234，默认是增。
+    {	
+		/// <summary>
+        /// defaultSqlType当前选择的SQL语句类别，3214分别表示Update、Delete、Insert、Up-Only
+        /// </summary>
+        private static int defaultSqlType = 1;
+		
+		/// <summary>
+        /// thisYourFirstTap记录用户操作次数。
+        /// </summary>
         private static int thisYourFirstTap = 1;
 
+		/// <summary>
+        /// defaultTables默认引用第几张Sheet表的数据，可理解为用户引用第0张表默认。
+        /// </summary>
         public static int defaultTables = 0;
 
+		/// <summary>
+        /// selectTableName当前选中的Sheet表的表名，如“Sheet1”。
+        /// </summary>
         public static string selectTableName = "";
+		
+		/// <summary>
+        /// primaryKeyName手动定义数据库某表主键名，仅在Up-Only方法中用到该字段。
+        /// </summary>
         public static string primaryKeyName = "";
 
         public FormMain()
@@ -88,6 +105,11 @@ namespace SQLLangCreateTooling
             #endregion //调戏动作结束
         }
 
+		/// <summary>
+        /// 判断当前文件的类型，是否为Excel文件、判定excel版本。
+        /// </summary>
+        /// <param name="str">文件完整的路径名,“D:\\test.xls”</param>
+        /// <returns>int整型类型；2003表示2003及以前Office版Excel文件。2007表示2007及以后Office版Excel文件，后缀名通常为“.xlsx”。0其它文件类型，-1表示非有效文件或路径名。</returns>
         private int fileTypesOrExcelTypes(string str)
         {
             if (str != "")
@@ -269,7 +291,7 @@ namespace SQLLangCreateTooling
         private DataSet created_SQL_Lang_FromExcelFile(string filePath)
         {
             /** 
-             * filePath = "E:\\QQ_File\\康视马甲10.22.xls";
+             * filePath = "E:\\QQ_File\\10.22.xls";
              * filePath = filePath.Replace("\\","\\\\");//这里原字串中已经有两道杠了 
              **/
             try

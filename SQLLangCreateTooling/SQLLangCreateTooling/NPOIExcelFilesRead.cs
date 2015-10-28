@@ -28,6 +28,11 @@ namespace SQLLangCreateTooling
     class NPOIExcelFilesRead
     {
         #region    //测试读取Excel成功与否的方法代码
+		/// <summary>
+        /// 测试NPOI组件方法得到*.xls文件第一张‘Sheet’的内容；未被用到的方法。
+        /// </summary>
+        /// <param name="FileName">文件完整的路径名，如D:\\test.xls</param>
+        /// <returns>返回FileName第一张‘Sheet’的内容</returns>
         public static string npoiExtractStringTesting(string FileName)
         {
             try
@@ -47,7 +52,11 @@ namespace SQLLangCreateTooling
             }
         }
 
-
+		/// <summary>
+        /// 测试ExcelPackage组件方法得到*.xlsx文件‘Sheet1’表中的第二行二列单元格内容；未被用到的方法。
+        /// </summary>
+        /// <param name="FileName">文件完整的路径名,D:\\test.xls</param>
+        /// <returns>返回FileName文件‘Sheet1’表中第二行二列单元格的内容</returns>
         public static string excelPackageExtractStringTesting(string FileName)
         { 
             try 
@@ -76,7 +85,13 @@ namespace SQLLangCreateTooling
         }
         #endregion  //测试代码End
 
-
+		/// <summary>
+        /// 依据参数，选择生成SQL语言的方法。
+        /// </summary>
+        /// <param name="filesPath">文件完整的路径名,如D:\\test.xls</param>
+		/// <param name="filesTypes">文件类型，如*.xls将会引用NPOI组件</param>
+		/// <param name="sqlLangTypes">SQL语言类别，如Insert、Update、Delete、Up-Only</param>
+        /// <returns></returns>
         public static void printSQLLangTypesAndMethods(string filesPath, int filesTypes, int sqlLangTypes)
         {
             if(filesTypes == 2003)
@@ -173,6 +188,11 @@ namespace SQLLangCreateTooling
 
 
         #region    //excelPackage读取数据库的方法--start--
+		/// <summary>
+        /// ExcelPackage组件方法生成UpdateOnly语句。
+        /// </summary>
+        /// <param name="myWorksheet">引用ExcelPackage组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void excelPackagePrintSQLLangUpdateOnly(ExcelWorksheet myWorksheet)
         {
             int hangY = 1, lieXX = 1;
@@ -256,6 +276,11 @@ namespace SQLLangCreateTooling
             }
         }
 
+		/// <summary>
+        /// ExcelPackage组件方法生成Update语句。
+        /// </summary>
+        /// <param name="myWorksheet">引用ExcelPackage组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void excelPackagePrintSQLLangUpdate(ExcelWorksheet myWorksheet)
         {
             int hangY = 1, lieXX = 1;
@@ -325,6 +350,11 @@ namespace SQLLangCreateTooling
             }
         }
 
+		/// <summary>
+        /// ExcelPackage组件方法生成Delete语句。
+        /// </summary>
+        /// <param name="myWorksheet">引用ExcelPackage组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void excelPackagePrintSQLLangDelete(ExcelWorksheet myWorksheet)
         {
             int hangY = 1, lieXX = 1;
@@ -394,7 +424,11 @@ namespace SQLLangCreateTooling
 
         }
 
-
+		/// <summary>
+        /// ExcelPackage组件方法生成Insert语句。
+        /// </summary>
+        /// <param name="myWorksheet">引用ExcelPackage组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         public static void excelPackagePrintSQLLangInsert(ExcelWorksheet myWorksheet)
         {
             int hangY = 1, lieXX = 1;
@@ -487,6 +521,11 @@ namespace SQLLangCreateTooling
 
 
         #region    //npoi读取数据库的方法--start--
+		/// <summary>
+        /// NPOI组件方法生成UpdateOnly语句。
+        /// </summary>
+        /// <param name="isheet">引用NPOI组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void npoiPrintSQLLangUpdateOnly(ISheet isheet)
         {
             int hangY, lieXX;
@@ -557,6 +596,11 @@ namespace SQLLangCreateTooling
             }
         }
 
+		/// <summary>
+        /// NPOI组件方法生成Update语句。
+        /// </summary>
+        /// <param name="isheet">引用NPOI组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void npoiPrintSQLLangUpdate(ISheet isheet)
         {
             int hangY, lieXX;
@@ -613,6 +657,11 @@ namespace SQLLangCreateTooling
             }
         }
 
+		/// <summary>
+        /// NPOI组件方法生成Delete语句。
+        /// </summary>
+        /// <param name="isheet">引用NPOI组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void npoiPrintSQLLangDelete(ISheet isheet)
         {
             int hangY, lieXX;
@@ -669,7 +718,11 @@ namespace SQLLangCreateTooling
 
         }
 
-
+		/// <summary>
+        /// NPOI组件方法生成Insert语句。
+        /// </summary>
+        /// <param name="isheet">引用NPOI组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         public static void npoiPrintSQLLangInsert(ISheet isheet)
         {
             int hangY, lieXX;
