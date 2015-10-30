@@ -6,13 +6,13 @@ using System.Runtime.InteropServices;
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("SQLLangCreateTooling")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyDescription("Windows平台读取EXCEL表即时生成数据库语言工具")]
+[assembly: AssemblyConfiguration("Personal")]
+[assembly: AssemblyCompany("小刘工作室")]
 [assembly: AssemblyProduct("SQLLangCreateTooling")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyTrademark("粤ICP备15065555号")]
+[assembly: AssemblyCulture("China,GuangDong Province")]
 
 // 将 ComVisible 设置为 false 使此程序集中的类型
 // 对 COM 组件不可见。如果需要从 COM 访问此程序集中的类型，
