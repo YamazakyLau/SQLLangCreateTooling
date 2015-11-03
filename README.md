@@ -1,11 +1,12 @@
 __帮助说明__
 
 #####a.	
-程序适用于向已有数据库表中增删改一定的数据，通常情形下数据内容已经确定，然而通过并没有合适的方法快速添加到数据库；
+程序适用于向已有数据库表中<font color=blue>增删改</font>一定的数据，通常情形下数据内容已经确定，然而并没有合适的方法快速添加到数据库；
 ***
 
 #####b.	
-您可以先将数据有序的加入到EXCEL表中，软件帮您生成[Structured Query Language](http://baike.baidu.com/link?url=Cpq9E0ee28w2onlnqJh_f3qJdviVvBM3vyizpoW9OYRImp_n2ZC4oRM9PywjRLtLA7qpFgBU4co70ceuHExDyziKMYubvyKZbimr_p0DykmvYgUM4fXVxmF45SfcyiSKHXMNhpGubp83CrlMFr4f7nKQLix-OSAQByqo8LlAW_7"百度地址")
+您可以先将数据有序的加入到EXCEL表中，软件帮您生成<font color=red>Structured Query Language</font>
+[Structured Query Language介绍](http://baike.baidu.com/link?url=Cpq9E0ee28w2onlnqJh_f3qJdviVvBM3vyizpoW9OYRImp_n2ZC4oRM9PywjRLtLA7qpFgBU4co70ceuHExDyziKMYubvyKZbimr_p0DykmvYgUM4fXVxmF45SfcyiSKHXMNhpGubp83CrlMFr4f7nKQLix-OSAQByqo8LlAW_7"百度地址")
 ***
 
 #####c.	
@@ -21,7 +22,7 @@ __帮助说明__
 ***
 
 #####f.	
-文件名、表名尽量使用英文+数字；因为有可能编码无法被程序识别。（本程序在Microsoft Visual Studio 2008版IDE上调试通过，实际测试系统为简体中文版64位Win7电脑）
+文件名、表名尽量使用英文+数字；因为有可能编码无法被程序识别。（<font color=green>本程序在Microsoft Visual Studio 2008版IDE上调试通过，实际测试系统为简体中文版64位Win7电脑</font>）
 ***
 
 #####g.	
@@ -29,4 +30,4 @@ __帮助说明__
 ***
 
 #####h.	
-程序引用开源组件NPOI、ExcelPackage ，理论上不需要您的电脑上安装EXCEL阅读软件也能使用，软件抛弃原来的OleDbConnection（或叫OLEDB）程序接口，但仍保留代码痕迹。
+程序引用开源组件<font color=red>NPOI、ExcelPackage</font> ，理论上不需要您的电脑上安装EXCEL阅读软件也能使用，软件抛弃原来的OleDbConnection（或叫OLEDB）程序接口，但仍保留代码痕迹。
