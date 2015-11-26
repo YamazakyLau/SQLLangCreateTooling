@@ -92,7 +92,7 @@ namespace SQLLangCreateTooling
 		/// <param name="filesTypes">文件类型，如*.xls将会引用NPOI组件</param>
 		/// <param name="sqlLangTypes">SQL语言类别，如Insert、Update、Delete、Up-Only</param>
         /// <returns></returns>
-        public static void printSQLLangTypesAndMethods(string filesPath, int filesTypes, int sqlLangTypes)
+        public static void npoiPrintSQLLangTypesAndMethods(string filesPath, int filesTypes, int sqlLangTypes)
         {
             if(filesTypes == 2003)
             {
@@ -111,7 +111,7 @@ namespace SQLLangCreateTooling
                     switch (sqlLangTypes)
                     {
                         case 1:
-                            npoiPrintSQLLangInsert(isheet);
+                            npoiPrintSQLLangInsertMulti(isheet);
                             break;
                         case 2:
                             npoiPrintSQLLangDelete(isheet);
@@ -121,6 +121,9 @@ namespace SQLLangCreateTooling
                             break;
                         case 4:
                             npoiPrintSQLLangUpdateOnly(isheet);
+                            break;
+                        case 5:
+                            npoiPrintSQLLangInsertEachLineASentence(isheet);
                             break;
                         default:
                             break;
@@ -158,7 +161,7 @@ namespace SQLLangCreateTooling
                     switch (sqlLangTypes)
                     {
                         case 1:
-                            excelPackagePrintSQLLangInsert(myWorksheet);
+                            excelPackagePrintSQLLangInsertMulti(myWorksheet);
                             break;
                         case 2:
                             excelPackagePrintSQLLangDelete(myWorksheet);
@@ -168,6 +171,9 @@ namespace SQLLangCreateTooling
                             break;
                         case 4:
                             excelPackagePrintSQLLangUpdateOnly(myWorksheet);
+                            break;
+                        case 5:
+                            excelPackagePrintSQLLangInsertEachLineASentence(myWorksheet);
                             break;
                         default:
                             break;
@@ -429,7 +435,7 @@ namespace SQLLangCreateTooling
         /// </summary>
         /// <param name="myWorksheet">引用ExcelPackage组件的某张Sheet表的数据内容</param>
         /// <returns></returns>
-        public static void excelPackagePrintSQLLangInsert(ExcelWorksheet myWorksheet)
+        public static void excelPackagePrintSQLLangInsertMulti(ExcelWorksheet myWorksheet)
         {
             int hangY = 1, lieXX = 1;
             string eCellStr = "";
@@ -516,6 +522,83 @@ namespace SQLLangCreateTooling
             //结束写入
             sw.Close();
         }
+
+
+        private static void excelPackagePrintSQLLangInsertEachLineASentence(ExcelWorksheet myWorksheet)
+        {
+            int hangY = 0, lieXX = 0;
+            string eCellStr = "", langTop = "";
+            string basicStr = "INSERT INTO ";
+
+            eCellStr = myWorksheet.Cell(1, 1).Value;
+
+            while (eCellStr != null && eCellStr != "")
+            {
+                lieXX++;
+                eCellStr = myWorksheet.Cell(1, lieXX).Value;
+            }
+
+            eCellStr = myWorksheet.Cell(1, 1).Value;
+            while (eCellStr != null && eCellStr != "")
+            {
+                hangY++;
+                eCellStr = myWorksheet.Cell(hangY, 1).Value;
+            }
+
+            if (hangY < 3 || lieXX < 3)
+            {
+                MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                return;     //如果行列太少，那么直接无视！
+            }
+
+            FileStream aFile = new FileStream("Insert.txt", FileMode.Append);
+            StreamWriter sw = new StreamWriter(aFile);
+
+            /**
+             * INSERT INTO `kswiki2`.`wish` (id,user_id,title,text,created_at,votes_count) VALUES 
+                        ('526','17','我想','你好啊','2014-09-20 21:33:25','230');
+             * INSERT INTO `kswiki2`.`wish` (id,user_id,title,text,created_at,votes_count) VALUES 
+                        ('527','18','不想','我好啊','2014-09-21 21:34:26','231');
+             * 同一个表中插入，每行只写一句话，并以分号结束，方便大量的数据多次、多进程处理。
+            **/
+            langTop = basicStr + myWorksheet.Cell(2, 1).Value + " (";
+
+            for (int j = 2; j < lieXX; j++)
+            {
+                langTop += myWorksheet.Cell(1, j).Value;
+                if (j != lieXX - 1)
+                {
+                    langTop = langTop + ",";
+                }
+            }
+            //固定部分无须带入循环中生成
+            langTop += ") VALUES (";   //langTop = INSERT INTO `kswiki2`.`wish` (id,user_id,title,text,created_at,votes_count) VALUES (
+
+            for (int i = 2; i < hangY; i++)
+            {
+                string outPrint = "";
+
+                for (int j = 2; j < lieXX; j++)
+                {
+                    outPrint += "'" + myWorksheet.Cell(i, j).Value + "'";
+
+                    if (j != lieXX - 1)
+                    {
+                        outPrint = outPrint + ",";
+                    }
+                }
+                //outPrint = '526','17','我想','你好啊','2014-09-20 21:33:25','230'
+                outPrint = langTop + outPrint + ");";
+
+                // Write data to file.
+                sw.WriteLine(outPrint);
+            }
+
+            //结束写入
+            sw.Close();
+        }
+
         #endregion    //excelPackage读取数据库的方法结束--END--
 
 
@@ -723,7 +806,7 @@ namespace SQLLangCreateTooling
         /// </summary>
         /// <param name="isheet">引用NPOI组件的某张Sheet表的数据内容</param>
         /// <returns></returns>
-        public static void npoiPrintSQLLangInsert(ISheet isheet)
+        public static void npoiPrintSQLLangInsertMulti(ISheet isheet)
         {
             int hangY, lieXX;
             string basicStr = "INSERT INTO ";
@@ -798,6 +881,71 @@ namespace SQLLangCreateTooling
             //结束写入
             sw.Close();
         }
+
+
+        private static void npoiPrintSQLLangInsertEachLineASentence(ISheet isheet)
+        {
+            int hangY, lieXX;
+            string basicStr = "INSERT INTO ";
+            string langTop = "";
+
+            hangY = isheet.LastRowNum;//建议不要出现无效数据列，如有部分单元格空白！
+            lieXX = isheet.GetRow(0).LastCellNum;
+
+            if (hangY < 2 || lieXX < 2)
+            {
+                MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                return;     //如果行列太少，那么直接无视！
+            }
+
+            FileStream aFile = new FileStream("Insert.txt", FileMode.Append);
+            StreamWriter sw = new StreamWriter(aFile);
+
+            /*
+             * INSERT INTO `kswiki2`.`wish` (id,user_id,title,text,created_at,votes_count) VALUES 
+                        ('526','17','我想','你好啊','2014-09-20 21:33:25','230');
+             * INSERT INTO `kswiki2`.`wish` (id,user_id,title,text,created_at,votes_count) VALUES 
+                        ('527','18','不想','我好啊','2014-09-21 21:34:26','231');
+             * 同一个表中插入，每行只写一句话，并以分号结束，方便大量的数据多次、多进程处理。
+            */
+            langTop = basicStr + isheet.GetRow(1).Cells[0].ToString() + " (";
+
+            for (int j = 1; j < lieXX; j++)
+            {
+                langTop += isheet.GetRow(0).Cells[j].ToString();
+                if (j != lieXX - 1)
+                {
+                    langTop = langTop + ",";
+                }
+            }
+            //固定部分无须带入循环中生成
+            langTop += ") VALUES (";   //langTop = INSERT INTO `kswiki2`.`wish` (id,user_id,title,text,created_at,votes_count) VALUES (
+
+            for (int i = 1; i <= hangY; i++)
+            {
+                string outPrint = "";
+
+                for (int j = 1; j < lieXX; j++)
+                {
+                    outPrint += "'" + isheet.GetRow(i).Cells[j].ToString() + "'";
+                    
+                    if (j != lieXX - 1)
+                    {
+                        outPrint = outPrint + ",";
+                    }
+                }
+                //outPrint = '526','17','我想','你好啊','2014-09-20 21:33:25','230'
+                outPrint = langTop + outPrint + ");";
+
+                // Write data to file.
+                sw.WriteLine(outPrint);
+            }
+
+            //结束写入
+            sw.Close();
+        }
+
         #endregion    //npoi读取数据库的方法结束--END--
 
 

@@ -82,7 +82,7 @@ namespace SQLLangCreateTooling
 
             if (fileTypes > 0)
             {
-                NPOIExcelFilesRead.printSQLLangTypesAndMethods(this.textBoxSelect.Text, fileTypes, defaultSqlType);
+                NPOIExcelFilesRead.npoiPrintSQLLangTypesAndMethods(this.textBoxSelect.Text, fileTypes, defaultSqlType);
 
                 this.labelSheetName.Text = "表格名为：“" + selectTableName + "”";
             }
@@ -157,6 +157,7 @@ namespace SQLLangCreateTooling
             defaultSqlType = 4;
             this.textBoxUpdateOnly.ReadOnly = false;
         }
+
 
         #region //旧的代码，OleDbConnection方式，OLEDB方法打开Excel文档；已经弃用的代码。
         private void createLangByType(int num, DataSet getDataSet)
@@ -350,6 +351,7 @@ namespace SQLLangCreateTooling
                       MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+
         private void textBoxTableNum_KeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
             e.Handled = true;//阻止输入
@@ -359,6 +361,13 @@ namespace SQLLangCreateTooling
             {
                 e.Handled = false;
             }
+        }
+
+
+        private void radioButtonInsertPerLine_CheckedChanged(object sender, EventArgs e)
+        {
+            defaultSqlType = 5;
+            this.textBoxUpdateOnly.ReadOnly = true;
         }
 
 

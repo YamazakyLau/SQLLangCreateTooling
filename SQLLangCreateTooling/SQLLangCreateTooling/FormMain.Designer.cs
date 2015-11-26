@@ -42,6 +42,7 @@
             this.labelSheetName = new System.Windows.Forms.Label();
             this.label_Only = new System.Windows.Forms.Label();
             this.textBoxUpdateOnly = new System.Windows.Forms.TextBox();
+            this.radioButtonInsertPerLine = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.textBoxTableNum)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +52,7 @@
             this.textBoxSelect.Location = new System.Drawing.Point(12, 37);
             this.textBoxSelect.MaxLength = 255;
             this.textBoxSelect.Name = "textBoxSelect";
-            this.textBoxSelect.Size = new System.Drawing.Size(384, 23);
+            this.textBoxSelect.Size = new System.Drawing.Size(564, 23);
             this.textBoxSelect.TabIndex = 0;
             this.textBoxSelect.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBox_TextChanged);
             // 
@@ -80,7 +81,7 @@
             // buttonCreate
             // 
             this.buttonCreate.Font = new System.Drawing.Font("宋体", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.buttonCreate.Location = new System.Drawing.Point(315, 120);
+            this.buttonCreate.Location = new System.Drawing.Point(496, 120);
             this.buttonCreate.Name = "buttonCreate";
             this.buttonCreate.Size = new System.Drawing.Size(80, 40);
             this.buttonCreate.TabIndex = 3;
@@ -91,19 +92,19 @@
             // radioButtonInsert
             // 
             this.radioButtonInsert.AutoSize = true;
-            this.radioButtonInsert.Location = new System.Drawing.Point(12, 90);
+            this.radioButtonInsert.Location = new System.Drawing.Point(12, 86);
             this.radioButtonInsert.Name = "radioButtonInsert";
-            this.radioButtonInsert.Size = new System.Drawing.Size(59, 16);
+            this.radioButtonInsert.Size = new System.Drawing.Size(95, 16);
             this.radioButtonInsert.TabIndex = 4;
             this.radioButtonInsert.TabStop = true;
-            this.radioButtonInsert.Text = "Insert";
+            this.radioButtonInsert.Text = "Insert-Multi";
             this.radioButtonInsert.UseVisualStyleBackColor = true;
             this.radioButtonInsert.CheckedChanged += new System.EventHandler(this.radioButtonInsert_CheckedChanged);
             // 
             // radioButtonUpdate
             // 
             this.radioButtonUpdate.AutoSize = true;
-            this.radioButtonUpdate.Location = new System.Drawing.Point(174, 90);
+            this.radioButtonUpdate.Location = new System.Drawing.Point(159, 86);
             this.radioButtonUpdate.Name = "radioButtonUpdate";
             this.radioButtonUpdate.Size = new System.Drawing.Size(59, 16);
             this.radioButtonUpdate.TabIndex = 5;
@@ -115,7 +116,7 @@
             // radioButtonDelete
             // 
             this.radioButtonDelete.AutoSize = true;
-            this.radioButtonDelete.Location = new System.Drawing.Point(336, 90);
+            this.radioButtonDelete.Location = new System.Drawing.Point(306, 86);
             this.radioButtonDelete.Name = "radioButtonDelete";
             this.radioButtonDelete.Size = new System.Drawing.Size(59, 16);
             this.radioButtonDelete.TabIndex = 6;
@@ -139,7 +140,7 @@
             // labelTableNum
             // 
             this.labelTableNum.AutoSize = true;
-            this.labelTableNum.Location = new System.Drawing.Point(16, 137);
+            this.labelTableNum.Location = new System.Drawing.Point(16, 142);
             this.labelTableNum.Name = "labelTableNum";
             this.labelTableNum.Size = new System.Drawing.Size(59, 12);
             this.labelTableNum.TabIndex = 9;
@@ -147,7 +148,7 @@
             // 
             // textBoxTableNum
             // 
-            this.textBoxTableNum.Location = new System.Drawing.Point(81, 135);
+            this.textBoxTableNum.Location = new System.Drawing.Point(98, 140);
             this.textBoxTableNum.Maximum = new decimal(new int[] {
             9,
             0,
@@ -170,12 +171,13 @@
             // radioButtonUpdateOnly
             // 
             this.radioButtonUpdateOnly.AutoSize = true;
+            this.radioButtonUpdateOnly.ForeColor = System.Drawing.Color.DarkViolet;
             this.radioButtonUpdateOnly.Location = new System.Drawing.Point(12, 112);
             this.radioButtonUpdateOnly.Name = "radioButtonUpdateOnly";
-            this.radioButtonUpdateOnly.Size = new System.Drawing.Size(65, 16);
+            this.radioButtonUpdateOnly.Size = new System.Drawing.Size(89, 16);
             this.radioButtonUpdateOnly.TabIndex = 11;
             this.radioButtonUpdateOnly.TabStop = true;
-            this.radioButtonUpdateOnly.Text = "Up-Only";
+            this.radioButtonUpdateOnly.Text = "Update-Only";
             this.radioButtonUpdateOnly.UseVisualStyleBackColor = true;
             this.radioButtonUpdateOnly.CheckedChanged += new System.EventHandler(this.radioButtonUpdateOnly_CheckedChanged);
             // 
@@ -183,7 +185,7 @@
             // 
             this.labelSheetName.AutoSize = true;
             this.labelSheetName.ForeColor = System.Drawing.Color.Red;
-            this.labelSheetName.Location = new System.Drawing.Point(125, 137);
+            this.labelSheetName.Location = new System.Drawing.Point(157, 142);
             this.labelSheetName.Name = "labelSheetName";
             this.labelSheetName.Size = new System.Drawing.Size(95, 12);
             this.labelSheetName.TabIndex = 12;
@@ -192,7 +194,8 @@
             // label_Only
             // 
             this.label_Only.AutoSize = true;
-            this.label_Only.Location = new System.Drawing.Point(83, 114);
+            this.label_Only.ForeColor = System.Drawing.Color.DarkViolet;
+            this.label_Only.Location = new System.Drawing.Point(129, 114);
             this.label_Only.Name = "label_Only";
             this.label_Only.Size = new System.Drawing.Size(77, 12);
             this.label_Only.TabIndex = 13;
@@ -200,18 +203,32 @@
             // 
             // textBoxUpdateOnly
             // 
-            this.textBoxUpdateOnly.Location = new System.Drawing.Point(166, 111);
+            this.textBoxUpdateOnly.ForeColor = System.Drawing.Color.DarkViolet;
+            this.textBoxUpdateOnly.Location = new System.Drawing.Point(212, 111);
             this.textBoxUpdateOnly.MaxLength = 20;
             this.textBoxUpdateOnly.Name = "textBoxUpdateOnly";
-            this.textBoxUpdateOnly.Size = new System.Drawing.Size(118, 21);
+            this.textBoxUpdateOnly.Size = new System.Drawing.Size(202, 21);
             this.textBoxUpdateOnly.TabIndex = 14;
             this.textBoxUpdateOnly.Text = "id";
+            // 
+            // radioButtonInsertPerLine
+            // 
+            this.radioButtonInsertPerLine.AutoSize = true;
+            this.radioButtonInsertPerLine.Location = new System.Drawing.Point(453, 86);
+            this.radioButtonInsertPerLine.Name = "radioButtonInsertPerLine";
+            this.radioButtonInsertPerLine.Size = new System.Drawing.Size(89, 16);
+            this.radioButtonInsertPerLine.TabIndex = 15;
+            this.radioButtonInsertPerLine.TabStop = true;
+            this.radioButtonInsertPerLine.Text = "Insert-Each";
+            this.radioButtonInsertPerLine.UseVisualStyleBackColor = true;
+            this.radioButtonInsertPerLine.CheckedChanged += new System.EventHandler(this.radioButtonInsertPerLine_CheckedChanged);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(414, 166);
+            this.ClientSize = new System.Drawing.Size(588, 168);
+            this.Controls.Add(this.radioButtonInsertPerLine);
             this.Controls.Add(this.textBoxUpdateOnly);
             this.Controls.Add(this.label_Only);
             this.Controls.Add(this.labelSheetName);
@@ -251,6 +268,7 @@
         private System.Windows.Forms.Label labelSheetName;
         private System.Windows.Forms.Label label_Only;
         private System.Windows.Forms.TextBox textBoxUpdateOnly;
+        private System.Windows.Forms.RadioButton radioButtonInsertPerLine;
     }
 }
 
