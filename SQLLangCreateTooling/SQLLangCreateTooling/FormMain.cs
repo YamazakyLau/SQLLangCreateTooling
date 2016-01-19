@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -39,12 +39,19 @@ namespace SQLLangCreateTooling
         /// </summary>
         public static string primaryKeyName = "";
 
+        /// <summary>
+        /// isSqlLangCreatedSuccessful默认为生成语句失败，当成功后全局变量值变为1。
+        /// </summary>
+        public static bool isSqlLangCreatedSuccessful = false;
+
+
         public FormMain()
         {
             InitializeComponent();
             this.radioButtonInsert.Checked = true;
             this.textBoxUpdateOnly.ReadOnly = true;
         }
+
 
         private void textBox_TextChanged(object sender, MouseEventArgs e)
         {
@@ -74,17 +81,32 @@ namespace SQLLangCreateTooling
         #endregion
         }
 
+
         private void buttonCreate_Click(object sender, EventArgs e)
         {
-            //whichTablesSelect();  //屏蔽的功能
+            whichTablesSelect();
+
             int fileTypes = fileTypesOrExcelTypes(this.textBoxSelect.Text);
             primaryKeyName = this.textBoxUpdateOnly.Text;
 
             if (fileTypes > 0)
             {
-                NPOIExcelFilesRead.npoiPrintSQLLangTypesAndMethods(this.textBoxSelect.Text, fileTypes, defaultSqlType);
+                try
+                {
+                    NPOIExcelFilesRead.npoiPrintSQLLangTypesAndMethods(this.textBoxSelect.Text, fileTypes, defaultSqlType);
+                    
+                    this.labelSheetName.Text = "表格名为：“" + selectTableName + "”";
 
-                this.labelSheetName.Text = "表格名为：“" + selectTableName + "”";
+                    if (isSqlLangCreatedSuccessful)
+                    {
+                        MessageBox.Show("语句生成成功，程序处理完毕！", "温馨提示",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch
+                {
+                }
+                
             }
             else
             #region //调戏用户的提示框，前面两次会提醒用户需要引入文件，后续不再提醒
@@ -104,6 +126,7 @@ namespace SQLLangCreateTooling
             }
             #endregion //调戏动作结束
         }
+
 
 		/// <summary>
         /// 判断当前文件的类型，是否为Excel文件、判定excel版本。
@@ -133,11 +156,13 @@ namespace SQLLangCreateTooling
                 return -1;
         }
 
+
         private void radioButtonInsert_CheckedChanged(object sender, EventArgs e)
         {
             defaultSqlType = 1;
             this.textBoxUpdateOnly.ReadOnly = true;
         }
+
 
         private void radioButtonUpdate_CheckedChanged(object sender, EventArgs e)
         {
@@ -145,12 +170,14 @@ namespace SQLLangCreateTooling
             this.textBoxUpdateOnly.ReadOnly = true;
         }
 
+
         private void radioButtonDelete_CheckedChanged(object sender, EventArgs e)
         {
             defaultSqlType = 2;
             this.textBoxUpdateOnly.ReadOnly = true;
 
         }
+
 
         private void radioButtonUpdateOnly_CheckedChanged(object sender, EventArgs e)
         {
@@ -182,6 +209,7 @@ namespace SQLLangCreateTooling
             }
         }
 
+
         private void whichTablesSelect()
         {
             if (this.textBoxTableNum.Text == "")
@@ -210,6 +238,7 @@ namespace SQLLangCreateTooling
                 }
             }
         }
+
 
         private void testToExcel(string filePath)
         {
@@ -260,6 +289,7 @@ namespace SQLLangCreateTooling
             }
         }
 
+
         //如果连接字符串不对，有可能出现"Could not find installable ISAM ” Exception
         private string GetConnectionString(string fileName)
         {
@@ -288,6 +318,7 @@ namespace SQLLangCreateTooling
 
             return connectString;
         }
+
 
         private DataSet created_SQL_Lang_FromExcelFile(string filePath)
         {
@@ -345,6 +376,7 @@ namespace SQLLangCreateTooling
         }
         #endregion //旧的代码结束
 
+
         private void showHelpForTools(object sender, HelpEventArgs hlpevent)
         {
             MessageBox.Show("软件如有问题，请与我联系，https://github.com/YamazakyLau/SQLLangCreateTooling.git \n非诚勿扰！", "亲,哥终于找到你了！",
@@ -368,6 +400,73 @@ namespace SQLLangCreateTooling
         {
             defaultSqlType = 5;
             this.textBoxUpdateOnly.ReadOnly = true;
+        }
+
+
+        private void linkLabelHelpInfo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.textBoxTableNum.Focus();
+        }
+
+
+        private void buttonDataTrim_Click(object sender, EventArgs e)
+        {
+            whichTablesSelect();
+            //因为我将允许表格不齐整，且允许行中间出现无数据内容单元格，所以先要表明最大列数！
+            NPOIExcelDataTrim.whichDataTrimStyle(this.numericUpDownRawData.Text);
+
+            int fileTypes = fileTypesOrExcelTypes(this.textBoxSelect.Text);
+
+            if (fileTypes > 0)
+            {
+                try
+                {
+                    NPOIExcelDataTrim.npoiTrimTypesAndMethods(this.textBoxSelect.Text, fileTypes, defaultTables);
+
+                    this.labelSheetName.Text = "表格名为：“" + selectTableName + "”";
+                    
+                    if (isSqlLangCreatedSuccessful)
+                    {
+                        MessageBox.Show("数据整理成功，程序处理完毕！", "温馨提示",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch { }
+            }
+        }
+
+
+        private void buttonGroupMixedOne_Click(object sender, EventArgs e)
+        {
+            whichTablesSelect();
+            //因为我将允许表格不齐整，且允许行中间出现无数据内容单元格，所以先要表明最大列数！
+            NPOIExcelDataTrim.whichDataTrimStyle(this.numericUpDownRawData.Text);
+
+            int fileTypes = fileTypesOrExcelTypes(this.textBoxSelect.Text);
+
+            if (fileTypes > 0)
+            {
+                try
+                {
+                    NPOIExcelDataTrim.npoiGroupMixedOneMethods(this.textBoxSelect.Text, fileTypes, defaultTables);
+
+                    this.labelSheetName.Text = "表格名为：“" + selectTableName + "”";
+                    
+                    if (isSqlLangCreatedSuccessful)
+                    {
+                        MessageBox.Show("数据整理成功，程序处理完毕！", "温馨提示",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+                catch { }
+            }
+        }
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("数据合并帮助：\n1.合并时只针对第一列和第二列数据；\n2.请不要出现空白行单元格，否则过程会被中断；"
+                + "\n3.结果会存储为TXT文档。", "使用帮助",MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
 
