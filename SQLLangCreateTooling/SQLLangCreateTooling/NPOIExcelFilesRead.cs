@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,7 +47,8 @@ namespace SQLLangCreateTooling
 
             }
             catch
-            { 
+            {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 return null; 
             }
         }
@@ -78,8 +79,8 @@ namespace SQLLangCreateTooling
                 
             } 
             catch 
-            { 
-                //
+            {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 return null;
             }
         }
@@ -133,9 +134,11 @@ namespace SQLLangCreateTooling
                     //释放过程中使用的资源！
                     HBook.Close();
                     fs.Close();
+                    FormMain.isSqlLangCreatedSuccessful = true;
                 }
-                catch (IOException ex)
+                catch (Exception ex)
                 {
+                    FormMain.isSqlLangCreatedSuccessful = false;
                     MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
@@ -182,9 +185,11 @@ namespace SQLLangCreateTooling
 
                     //貌似很有必要释放内存，不然没法连续执行，不关掉程序文档打不开。
                     excelPackage.Dispose();
+                    FormMain.isSqlLangCreatedSuccessful = true;
                 }
-                catch (IOException ex)
+                catch (Exception ex)
                 {
+                    FormMain.isSqlLangCreatedSuccessful = false;
                     MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                 MessageBoxButtons.OK, MessageBoxIcon.Information);
                     return;
@@ -222,6 +227,7 @@ namespace SQLLangCreateTooling
 
             if (hangY < 3 || lieXX < 4)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
@@ -269,12 +275,15 @@ namespace SQLLangCreateTooling
 
                     // Write data to file.
                     sw.WriteLine(outPrint);
+                    //清空缓冲区
+                    sw.Flush();
                 }
 
                 //结束写入
                 sw.Close();
+                aFile.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -310,6 +319,7 @@ namespace SQLLangCreateTooling
 
             if (hangY < 3 || lieXX < 4)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
@@ -343,12 +353,15 @@ namespace SQLLangCreateTooling
 
                     // Write data to file.
                     sw.WriteLine(outPrint);
+                    //清空缓冲区
+                    sw.Flush();
                 }
 
                 //结束写入
                 sw.Close();
+                aFile.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -384,6 +397,7 @@ namespace SQLLangCreateTooling
 
             if (hangY < 3 || lieXX < 2)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
@@ -416,12 +430,15 @@ namespace SQLLangCreateTooling
 
                     // Write data to file.
                     sw.WriteLine(outPrint);
+                    //清空缓冲区
+                    sw.Flush();
                 }
 
                 //结束写入
                 sw.Close();
+                aFile.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -458,12 +475,13 @@ namespace SQLLangCreateTooling
 
             if (hangY < 3 || lieXX < 3)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
             }
 
-            FileStream aFile = new FileStream("Insert.txt", FileMode.Append);
+            FileStream aFile = new FileStream("InsertMulti.txt", FileMode.Append);
             StreamWriter sw = new StreamWriter(aFile);
 
             /*
@@ -517,13 +535,21 @@ namespace SQLLangCreateTooling
 
                 // Write data to file.
                 sw.WriteLine(outPrint);
+                //清空缓冲区
+                sw.Flush();
             }
 
             //结束写入
             sw.Close();
+            aFile.Close();
         }
 
 
+        /// <summary>
+        /// ExcelPackage组件方法生成Insert语句。
+        /// </summary>
+        /// <param name="myWorksheet">引用ExcelPackage组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void excelPackagePrintSQLLangInsertEachLineASentence(ExcelWorksheet myWorksheet)
         {
             int hangY = 0, lieXX = 0;
@@ -547,12 +573,13 @@ namespace SQLLangCreateTooling
 
             if (hangY < 3 || lieXX < 3)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
             }
 
-            FileStream aFile = new FileStream("Insert.txt", FileMode.Append);
+            FileStream aFile = new FileStream("InsertEach.txt", FileMode.Append);
             StreamWriter sw = new StreamWriter(aFile);
 
             /**
@@ -593,10 +620,13 @@ namespace SQLLangCreateTooling
 
                 // Write data to file.
                 sw.WriteLine(outPrint);
+                //清空缓冲区
+                sw.Flush();
             }
 
             //结束写入
             sw.Close();
+            aFile.Close();
         }
 
         #endregion    //excelPackage读取数据库的方法结束--END--
@@ -619,6 +649,7 @@ namespace SQLLangCreateTooling
 
             if (hangY < 2 || lieXX < 3)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
@@ -666,12 +697,15 @@ namespace SQLLangCreateTooling
 
                     // Write data to file.
                     sw.WriteLine(outPrint);
+                    //清空缓冲区
+                    sw.Flush();
                 }
 
                 //结束写入
                 sw.Close();
+                aFile.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -694,6 +728,7 @@ namespace SQLLangCreateTooling
 
             if (hangY < 2 || lieXX < 3)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
@@ -727,18 +762,22 @@ namespace SQLLangCreateTooling
 
                     // Write data to file.
                     sw.WriteLine(outPrint);
+                    //清空缓冲区
+                    sw.Flush();
                 }
 
                 //结束写入
                 sw.Close();
+                aFile.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
         }
+
 
 		/// <summary>
         /// NPOI组件方法生成Delete语句。
@@ -755,6 +794,7 @@ namespace SQLLangCreateTooling
 
             if (hangY < 2 || lieXX < 2)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
@@ -787,12 +827,15 @@ namespace SQLLangCreateTooling
 
                     // Write data to file.
                     sw.WriteLine(outPrint);
+                    //清空缓冲区
+                    sw.Flush();
                 }
 
                 //结束写入
                 sw.Close();
+                aFile.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -816,12 +859,13 @@ namespace SQLLangCreateTooling
 
             if (hangY < 2 || lieXX < 2)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
             }
 
-            FileStream aFile = new FileStream("Insert.txt", FileMode.Append);
+            FileStream aFile = new FileStream("InsertMulti.txt", FileMode.Append);
             StreamWriter sw = new StreamWriter(aFile);
 
             /*
@@ -876,13 +920,21 @@ namespace SQLLangCreateTooling
 
                 // Write data to file.
                 sw.WriteLine(outPrint);
+                //清空缓冲区
+                sw.Flush();
             }
 
             //结束写入
             sw.Close();
+            aFile.Close();
         }
 
 
+        /// <summary>
+        /// NPOI组件方法生成Insert语句。
+        /// </summary>
+        /// <param name="isheet">引用NPOI组件的某张Sheet表的数据内容</param>
+        /// <returns></returns>
         private static void npoiPrintSQLLangInsertEachLineASentence(ISheet isheet)
         {
             int hangY, lieXX;
@@ -894,12 +946,13 @@ namespace SQLLangCreateTooling
 
             if (hangY < 2 || lieXX < 2)
             {
+                FormMain.isSqlLangCreatedSuccessful = false;
                 MessageBox.Show("表格内容太少，无进行语句生成！确认返回并重新选择文件？", "提醒",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
                 return;     //如果行列太少，那么直接无视！
             }
 
-            FileStream aFile = new FileStream("Insert.txt", FileMode.Append);
+            FileStream aFile = new FileStream("InsertEach.txt", FileMode.Append);
             StreamWriter sw = new StreamWriter(aFile);
 
             /*
@@ -940,10 +993,13 @@ namespace SQLLangCreateTooling
 
                 // Write data to file.
                 sw.WriteLine(outPrint);
+                //清空缓冲区
+                sw.Flush();
             }
 
             //结束写入
             sw.Close();
+            aFile.Close();
         }
 
         #endregion    //npoi读取数据库的方法结束--END--
