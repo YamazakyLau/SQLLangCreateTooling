@@ -98,7 +98,7 @@ namespace SQLLangCreateTooling
                 //结束写入
                 sw.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -158,7 +158,7 @@ namespace SQLLangCreateTooling
                 //结束写入
                 sw.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -234,7 +234,7 @@ namespace SQLLangCreateTooling
                 //结束写入
                 sw.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -308,7 +308,7 @@ namespace SQLLangCreateTooling
                 //结束写入
                 sw.Close();
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("过程出现异常错误" + ex.ToString(), "重要提示",
                                     MessageBoxButtons.OK, MessageBoxIcon.Information);
