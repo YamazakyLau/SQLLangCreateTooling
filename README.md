@@ -43,4 +43,4 @@ __帮助说明__
 程序引用开源组件<font color=red>NPOI、ExcelPackage</font> ，理论上不需要您的电脑上安装EXCEL阅读软件也能使用，软件抛弃原来的OleDbConnection（或叫OLEDB）程序接口，但仍保留代码痕迹。
 
 #####g.
-![原型预览](https://github.com/YamazakyLau/SQLLangCreateTooling/blob/master/view.png “工具原型预览”)
+![原型预览](https://github.com/YamazakyLau/SQLLangCreateTooling/blob/master/view.png "工具原型预览")
