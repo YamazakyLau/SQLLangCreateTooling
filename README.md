@@ -1,5 +1,5 @@
 __帮助说明__
-
+----------------------
 #####a.	
 程序适用于向已有数据库表中<font color=blue>增删改</font>一定的数据，通常情形下数据内容已经确定，然而并没有合适的方法快速添加到数据库；
 实际工作中，我们习惯将收集的数据用EXCEL表来暂时保存，然后更多的时候我们并没有好的机制快速将Excel表中的内容直接导入到数据库中，SQLLangCreateTooling是一个Windows应用程序源码项目，方便大家使用Windows应用程序，快速生成SQL语言语句。
@@ -41,3 +41,6 @@ __帮助说明__
 
 #####h.	
 程序引用开源组件<font color=red>NPOI、ExcelPackage</font> ，理论上不需要您的电脑上安装EXCEL阅读软件也能使用，软件抛弃原来的OleDbConnection（或叫OLEDB）程序接口，但仍保留代码痕迹。
+
+#####g.
+![原型预览](https://github.com/YamazakyLau/SQLLangCreateTooling/blob/master/view.png “工具原型预览”)
